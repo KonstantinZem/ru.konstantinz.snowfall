@@ -80,7 +80,7 @@ Item {
                 Layout.row: 3;
                 Layout.column:1;
                 id: snowflakesNumb;
-                maximumValue: 100.0;
+                maximumValue: 150.0;
                 stepSize: 10.0;    
                 onValueChanged: {
                     cfg_changeSign = Math.floor(Math.random() * 10000);

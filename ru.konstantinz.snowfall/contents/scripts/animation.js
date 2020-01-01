@@ -34,9 +34,9 @@ function initialize(){
   createSnoflakes();
   
   for (var i=0; i < snwNumber; i++){
-		Ypos[i] = Math.round(Math.random()*(bottomBorder - topBorder) + topBorder);
-		Xpos[i] = Math.round(Math.random()*(rightBorder - leftBorder) + leftBorder);
-		Speed[i]= Math.floor(Math.random()*(config.maxSpeed - config.minSpeed) + config.minSpeed);
+		Ypos[i] = randomPosition('y');
+		Xpos[i] = randomPosition('x');
+		Speed[i]= Math.random()*(config.maxSpeed - config.minSpeed) + config.minSpeed;
 		Cstep[i]=0;
 		Step[i]=Math.random()*0.1+0.2;
 		}
@@ -64,33 +64,55 @@ function createSnoflakes() {
         for (var i=0; i < snwNumber; i++) {
 			var component = Qt.createComponent("../ui/snowflake.qml");
             snowflakes[i] = component.createObject(appWindow);
-            snowflakes[i].x = (snowflakes[i].width + 10) * i;  
-            snowflakes[i].visible = true;
 			}
   
 		for(var i = 0; i < snowflakes.length; i++){
-			snowflakes[i].y = Math.random() * bottomBorder;
-			snowflakes[i].x = Math.random() * (rightBorder - leftBorder) - leftBorder;
+			snowflakes[i].y = randomPosition('y');
+			snowflakes[i].x = randomPosition('x');
 			snowflakes[i].source = '../images/' + config.folderName + '/snowflake_' + snowflakes[i].imgVar + '.svg';
 			}
 		}
 
+function randomPosition(position){
+	let rndPos = 0;
+	let rndNum = 10;
+	
+	switch(position){
+		case 'x':
+			rndPos = Math.random()*(rightBorder - leftBorder) + leftBorder;
+		break;
+		case 'y':
+			rndPos = Math.random()*(bottomBorder - topBorder) + topBorder;
+		break;
+		case 'r'://Если просто надо сгенерировать небольшую случайную флуктуацию
+			Math.random()*rndNum;
+		break;
+		default:
+			rndPos = 0;
+			console.log('ERROR: Random position Wrong argument');
+		break;
+		
+	}
+	
+	return Math.round(rndPos);
+}
+
 function animate(){
-var sy;
-var sx;
+let sy;
+let sx;
    for (var i=0; i < snwNumber; i++){
 		sy = Speed[i]*Math.sin(90*Math.PI/180);
 		sx = Speed[i]*Math.cos(Cstep[i]);
 		Ypos[i]+=sy;
 		Xpos[i]+=sx;
 		
-		if (Ypos[i] > bottomBorder){
-			Ypos[i] = topBorder;
-			Xpos[i] = Math.round(Math.random()*rightBorder);
+		if (Ypos[i] > bottomBorder){//Если снежинка залетела за нижний край экрана
+			Ypos[i] = topBorder + randomPosition('r');//Перекидываем ее наверх, внося небольшей элемент случайности
+			Xpos[i] = randomPosition('x');
 			Speed[i] = 1;
 			}
-		
-			snowflakes[i].x = Math.min(rightBorder,Xpos[i]);
+			
+			snowflakes[i].x = Xpos[i];
 			snowflakes[i].y = Ypos[i];
 			
 			Cstep[i] += Step[i];
@@ -109,9 +131,9 @@ function choseWindDirection(){
 		windBlowingTimer.running = true;
 		}
 		if(windDirection > 1){
-				windToRight()
+				windToRight();
 				}else{
-					windToLeft()
+					windToLeft();
 					}
 }
 
@@ -125,7 +147,8 @@ function windToRight(){
 		Xpos[i]+= windSpeed;
 		
 		if(Xpos[i] > rightBorder){
-			Xpos[i] = leftBorder;
+			Xpos[i] = leftBorder + randomPosition('r');
+			Ypos[i] = randomPosition('y');
 			}
 		}
 	
@@ -140,7 +163,7 @@ function windToRight(){
 	if(windSpeed < 0){
 		windSteps = 0;
 		windBlowingTimer.running = false;
-		windTimer.interval = Math.round(Math.random()*(40000 - 3000) + 3000);
+		windTimer.interval = Math.round(Math.random()*37000 + 3000);
 		
 		console.log('Wind blowing to right. New wind begins after ' + windTimer.interval/1000  + ' сек.');
 		
@@ -154,7 +177,8 @@ function windToLeft(){
 		Xpos[i]+= windSpeed;
 		
 		if(Xpos[i] < leftBorder){
-			Xpos[i] = rightBorder;
+			Xpos[i] = rightBorder - randomPosition('r');
+			Ypos[i] = randomPosition('y');
 			}
 		}
 	
