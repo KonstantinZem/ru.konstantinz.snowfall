@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=This is snowfall in to yous desktop
+Encoding=UTF-8
+Icon=icon.png
+Name=Snowfall
+Name[ru]=Снегопад
+Type=Service
+X-KDE-PluginInfo-Author=Konstantin Zemoglyadchuk
+X-KDE-PluginInfo-Category=Fun and Games
+X-KDE-PluginInfo-Email=konstantinz@bk.ru
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=ru.konstantinz.snowfall
+X-KDE-PluginInfo-Version=1
+X-KDE-PluginInfo-Website=http://konstantinz.byethost32.com
+X-KDE-ServiceTypes=Plasma/Applet
+X-Plasma-API=declarativeappletscript
+X-Plasma-DefaultSize=300,100
+X-Plasma-MainScript=code/main.qml
+GenericName=Snowfall plasmoid
